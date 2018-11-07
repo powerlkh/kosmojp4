@@ -3,12 +3,10 @@
 lkhbrach --> lkhbracn --> lkhbrach ------  
 dhbrach  --> dhbracn  --> dhbrach  ------  master 
 
-
+<백업용>
        local.commit      remote.push     EC.remote.merge
 lkhbrach --> lkhbracn --> lkhbrach ------
-                                   EC.merge
-                          lkhbrach ---------master  
 
-
-        local.commit    local.commit    remote.push  remote.merge XXXX
-lkhbrach --> lkhbrach --> master   ------  master 
+<마스터 머지용>
+                      EC.remote             
+lkhbrach --> lkhbracn -->master  

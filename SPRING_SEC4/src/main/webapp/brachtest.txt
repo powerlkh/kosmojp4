@@ -1,3 +1,14 @@
-lkhbarach --> lkhbrach -->push(any)
 
-lkhbarch --> master --> push(master)
+       local.commit      remote.push     GIT.remote.merge
+lkhbrach --> lkhbracn --> lkhbrach ------  
+dhbrach  --> dhbracn  --> dhbrach  ------  master 
+
+
+       local.commit      remote.push     EC.remote.merge
+lkhbrach --> lkhbracn --> lkhbrach ------
+                                   EC.merge
+                          lkhbrach ---------master  
+
+
+        local.commit    local.commit    remote.push  remote.merge XXXX
+lkhbrach --> lkhbrach --> master   ------  master 

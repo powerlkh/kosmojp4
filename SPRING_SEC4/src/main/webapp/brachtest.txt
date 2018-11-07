@@ -1,1 +1,3 @@
-lkhbarach --> master
+lkhbarach --> lkhbrach -->push(any)
+
+lkhbarch --> master --> push(master)

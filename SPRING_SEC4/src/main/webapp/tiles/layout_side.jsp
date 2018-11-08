@@ -7,6 +7,7 @@
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body>
+layout_side.jsp<hr>
 <table border=0 cellpadding=0 cellspacing=1 width="100%">
 	<tr height=100 valign="middle">
 		<td bgcolor="yellow" colspan="2">
@@ -15,19 +16,14 @@
 	</tr>
 
 	<tr>
-		<td>
+		<td bgcolor="#d8bfd8">
 			<tiles:insertAttribute name="body_left" />
 		</td>
-		<td>
+		<td bgcolor="#cccccc">
 			<tiles:insertAttribute name="body_right" />
 		</td>
 	</tr>
 
-	<tr>
-		<td  colspan="2">
-			<tiles:insertAttribute name="body" />
-		</td>
-	</tr>
 </table>
 </body>
 </html>

@@ -25,9 +25,11 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kosmo.member.MemberServiceImpl;
@@ -44,8 +46,8 @@ public class MemberController {
 	public String defaultPage(ModelMap map) {
 		return "redirect:/member/loginPage";
 	}
-
-
+	
+	//TILES 관련 페이지 랜더링 ====================================================
 	@RequestMapping(value = "/tiles", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
 
@@ -54,8 +56,32 @@ public class MemberController {
 
 		String formattedDate = dateFormat.format(date);
 		model.addAttribute("serverTime", formattedDate );
-		return "side_member_denied_page";
+		return "tilesbody_member_login_page";
 	}
+	@RequestMapping(value = "/loginPageByTiles", method = RequestMethod.GET)
+	public String loginPageByTiles(Locale locale, Model model) {
+		return "tilesbody_member_login_page";
+	}
+	@RequestMapping(value = "/loginPageByMav", method = RequestMethod.GET)
+	public String loginPageByMav(Locale locale, Model model) {
+		return "member/login_page";
+	}
+	//TILES 관련 페이지 랜더링 ====================================================
+	
+	
+	
+	//----- @ResponseBody ------	
+	@RequestMapping(value = "/responsebody_ajax")
+	@ResponseBody
+	public ArrayList<MemberVO> resplyList(
+			@RequestParam("seq") int seq) { 
+		System.out.println("SEQ:"+ seq);
+		ArrayList<MemberVO>  list = service.memberList();
+		System.out.println(list.size());
+		return list;
+	}
+	
+	
 	
 	@RequestMapping(value = "/map", method = RequestMethod.GET)
 	public String googleMap() {

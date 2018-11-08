@@ -7,11 +7,11 @@
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body>
-팝업레이아웃~~~<br>
+layout_popup.jsp<hr>
 <table border=0 cellpadding=0 cellspacing=1 width="100%">
 	<tr>
-		<td>
-			<tiles:insertAttribute name="body"/>
+		<td bgcolor="#cccccc">
+			<tiles:insertAttribute name="body" />
 		</td>
 	</tr>
 </table>

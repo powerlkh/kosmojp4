@@ -8,5 +8,7 @@ dhbrach  --> dhbracn  --> dhbrach  ------  master
 lkhbrach --> lkhbracn --> lkhbrach ------
 
 <마스터 머지용>
-                      EC.remote             
+                 EC.git repository >프로젝트선택>master merge
+                              프로젝트선택>EC.remote> (lkh->master) merge            
 lkhbrach --> lkhbracn -->master  
+

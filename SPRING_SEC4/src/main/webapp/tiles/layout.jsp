@@ -7,6 +7,7 @@
 <title><tiles:getAsString name="title" /></title>
 </head>
 <body>
+layout.jsp<hr>
 <table border=0 cellpadding=0 cellspacing=1 width="100%">
 	<tr height=100 valign="middle">
 		<td bgcolor="yellow">
@@ -14,7 +15,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td>
+		<td bgcolor="#cccccc">
 			<tiles:insertAttribute name="body" />
 		</td>
 	</tr>

@@ -17,7 +17,7 @@
 
 <body ng-controller="moniteringCtrl" class="pad">
 
-<form action="/member/logout" method="post" id="myForm">
+<form action="/filterLogout" method="post" id="myForm">
 	<input type="hidden" name="${_csrf.parameterName}"
 	value="${_csrf.token}" />
 	<a href = "javascript:formSubmit()"> 로그아웃 </a>

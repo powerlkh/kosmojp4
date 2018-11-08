@@ -3,7 +3,25 @@
 
 <mapper namespace="com.kosmo.mapper.MemberMapper">
 
-	<!-- <resultMap id="memberMap" type="com.kosmo.member.MemberVO">
+<!-- 
+	
+create table member2(
+mseq number,
+mid varchar2(20),
+mpw varchar2(20),
+mname varchar2(20),
+mgubun varchar2(20),
+regdate date default sysdate
+);
+
+insert into member2(mseq,mid,mpw,mname,mgubun,regdate)
+values(member_seq.nextval , 'admin','111','어드민','a', sysdate);
+insert into member2(mseq,mid,mpw,mname,mgubun,regdate)
+values(member_seq.nextval , 'user','111','유저','u', sysdate);
+commit;
+	
+	
+	<resultMap id="memberMap" type="com.kosmo.member.MemberVO">
 		<id property="mseq" column="mseq" />
 		<result property="mid" column="mid"/>
 		<result property="mpw" column="mpw"/>
@@ -12,26 +30,25 @@
 		<result property="regdate" column="regdate"/>
 	</resultMap> -->
 
-
 	<select id="memberSearchByID" parameterType="java.lang.String" resultType="com.kosmo.member.MemberVO">
-		select mseq,mid,mpw,mname,mgubun,to_date(regdate,'yyyy-mm-dd') regdate from member
+		select mseq,mid,mpw,mname,mgubun,to_date(regdate,'yyyy-mm-dd') regdate from member2
 		where mid = #{mid}
 	</select>
 
 
 
 	<select id="memberList" resultType="com.kosmo.member.MemberVO">
-		select mseq,mid,mpw,mname,mgubun,to_date(regdate,'yyyy-mm-dd') regdate from member order by mseq desc
+		select mseq,mid,mpw,mname,mgubun,to_date(regdate,'yyyy-mm-dd') regdate from member2 order by mseq desc
 	</select>
 
 	<insert id="memberInsert" parameterType="com.kosmo.member.MemberVO">
 		insert
-		into member(mseq,mid,mpw,mname,mgubun,regdate)
+		into member2(mseq,mid,mpw,mname,mgubun,regdate)
 		values(member_seq.nextval , #{mid},#{mpw},#{mname},#{mgubun}, sysdate)
 	</insert>
 
 	<delete id="memberDelete" parameterType="com.kosmo.member.MemberVO">
-		delete from member where mseq=#{mseq}
+		delete from member2 where mseq=#{mseq}
 	</delete>
 
 

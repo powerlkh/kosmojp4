@@ -8,7 +8,7 @@
 
     <c:if test="${not empty error}">
         <div style="color:red">
-            login denied...<br />
+            잘못된 권한으로 접근하였습니다....<br />
             Caused : ${session.SPRING_SECURITY_LAST_EXCEPTION.message}
             message : ${message}
             error message : ${errorMessage}

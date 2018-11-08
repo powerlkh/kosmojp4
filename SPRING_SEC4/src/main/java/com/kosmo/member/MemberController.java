@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.biz.auth.CustomUserDetails;
 import com.kosmo.member.MemberServiceImpl;
 import com.kosmo.member.MemberVO;
 

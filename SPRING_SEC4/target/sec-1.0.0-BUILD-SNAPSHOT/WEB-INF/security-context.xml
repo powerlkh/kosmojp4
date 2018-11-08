@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans:beans
+<beans:beans 
 	xmlns="http://www.springframework.org/schema/security"
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:context="http://www.springframework.org/schema/context"
-	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd
-		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
-		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd">
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 
 	<context:component-scan base-package="com.kosmo.**" use-default-filters="false">
@@ -14,7 +14,7 @@
 	<context:include-filter expression="org.springframework.stereotype.Repository" type="annotation" />
 	</context:component-scan>
 
-
+	<http pattern="/resources/**" security="none"/>
 	<http pattern="/**/*.js" security="none"/>
 	<http pattern="/**/*.css" security="none"/>
 	<http pattern="/images/*" security="none"/>
@@ -33,73 +33,117 @@
     	<!-- use-expressions=true : SpEL사용 -->
     	<!-- 접근권한설정 -->
         <!-- <intercept-url pattern="/board" 			access="hasRole('ROLE_ANONYMOUS')" /> -->
-
-        <intercept-url pattern="/resources/**" 		access="permitAll" />
-        <intercept-url pattern="/member/loginPage" 	access="permitAll" />
-        <intercept-url pattern="/member/denied" 	access="permitAll" />
-        <intercept-url pattern="/member/logout" 	access="permitAll" />
-        <intercept-url pattern="/member/map" 		access="hasRole('ROLE_ADMIN')" />
+        <!-- <intercept-url pattern="/resources/**" 	access="permitAll" /> -->
+        <intercept-url pattern="/memberctl/loginPage" 	access="permitAll" />
+        <intercept-url pattern="/memberctl/deniedPage" 	access="permitAll" />
+        <intercept-url pattern="/memberctl/map" 		access="hasRole('ROLE_ADMIN')" />
+        
+        <intercept-url pattern="/memberctl/admin/**" 	access="hasRole('ROLE_ADMIN')" />
+        
+        
         <!-- 
-        <intercept-url pattern="/member/**" 		access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/user/**" 			access="hasRole('ROLE_USER')" /> 
+        <intercept-url pattern="/admin/**" 		access="hasRole('ROLE_ADMIN')" />
+        <intercept-url pattern="/user/**" 		access="hasRole('ROLE_USER')" /> 
         -->
         <intercept-url pattern="/**" 				access="permitAll" />
 
-		<access-denied-handler error-page="/member/denied" />
+		<access-denied-handler error-page="/memberctl/deniedPage" />
 
+<!-- One of '{"http://www.springframework.org/schema/security"}
+intercept-url, 
+access-denied-handler, 
+form-login, 
+openid-login, 
+x509
+jee, 
+http-basic, 
+logout, 
+session-management, 
+remember-me, 
+anonymous, 
+port-mappings, 
+custom-filter, 
+request-cache, 
+expression-handler,
+headers, 
+csrf, 
+cors
+  -->
+ 
         <!-- 로그인폼 &로그인 :  j_spring_security_login -->
         <form-login
-        		login-processing-url="/auth"
+        		login-processing-url="/filterLogin"
 	        	username-parameter="mid"
 				password-parameter="mpw"
-        		login-page="/member/loginPage"
-	        	default-target-url="/member/user_main"
-				authentication-failure-url="/member/loginPage?error"
-				always-use-default-target='true' />
-				<!-- 
-				인증 성공/실패 처리를 위한 핸들러 
+        		login-page="/memberctl/loginPage"  
 				authentication-success-handler-ref="authSuccessHandler"
 				authentication-failure-handler-ref="authFailureHandler"
-				 -->
-		<!-- 중복 로그인 설정 : 중복 로그인 시, 먼저 로그인한 세션 삭제
-		<session-management>
-			<concurrency-control max-sessions="2"  expired-url="/member/denied" />
-		</session-management>
-		-->
-
-        <!-- 로그아웃:  j_spring_security_logout -->
+				 />
+	        	<!-- default-target-url="/memberctl/userMainPage"
+				authentication-failure-url="/memberctl/loginPage?error"
+				always-use-default-target='true' -->
+				 
+		<!-- 로그아웃:  j_spring_security_logout -->
         <logout invalidate-session="true"
-        		logout-url="/member/logout"
+        		logout-url="/filterLogout"
         		delete-cookies="JSESSIONID,SPRING_SECURITY_REMEMBER_ME_COOKIE"	  
-        		logout-success-url="/member/loginPage?logout" />
+        		logout-success-url="/memberctl/loginPage?logout" />
 
-        <!-- CSRF 공격방지 -->
-		<csrf/>
+        
+		<!-- 중복 로그인 설정 : 중복 로그인 시, 먼저 로그인한 세션 삭제 -->
+		<session-management>
+			<concurrency-control max-sessions="1"  expired-url="/memberctl/duplicateLoginPage" />
+		</session-management>
 		
-		<!-- 세션 체크
-		<session-management invalid-session-url="/member/denied" />
-		-->
+		 
+		<!-- 세션 체크 -->	
+		<session-management invalid-session-url="/memberctl/deniedPage" />
+		
 		
 		<!--  Remember Me Expired  : 4주
 		<remember-me key="myStringKey" token-validity-seconds="2419200"/> 
+		 
+		<remember-me data-source-ref="dataSource" user-service-ref="customDetailService"/>
+		
+		 PreparedStatementCallback; bad SQL grammar [delete from persistent_logins where username = ?]; nested exception is java.sql.SQLSyntaxErrorException: ORA-00942: table or view does not exist
+		 
+		 http://websystique.com/spring-security/spring-security-4-remember-me-example-with-hibernate/
+		 
+		 CREATE TABLE persistent_logins (
+		    username VARCHAR(64) NOT NULL,
+		    series VARCHAR(64) NOT NULL,
+		    token VARCHAR(64) NOT NULL,
+		    last_used TIMESTAMP NOT NULL,
+		    PRIMARY KEY (series)
+		);
 		-->
+		<remember-me
+		        remember-me-parameter="remember-me"
+		        remember-me-cookie="remember-me"
+		        token-validity-seconds="86400"
+		    	data-source-ref="kosmoDS" 
+		    	user-service-ref="customDetailService"/>
+ 
+ 		<!-- CSRF 공격방지 -->
+		<csrf/>
+		
     </http>
 
-
-	<!-- password가 일치되는 경우 -->
-	<!-- <beans:bean id="authSuccessHandler" class="com.kosmo.member.CustomAuthenticationFailureHandler">
-		<beans:property name="successURL" value="/member/user_main" />
-	</beans:bean> -->
-	<!-- password가 일치되는 않는 경우 -->
-	<!-- <beans:bean id="authFailureHandler" class="com.kosmo.member.CustomAuthenticationFailureHandler">
-		<beans:property name="failureURL" value="/member/loginPage?error" />
+	<!-- 인증에 성공한 경우 -->
+	<beans:bean id="authSuccessHandler" class="com.kosmo.member.CustomAuthSuccessHandler">
+		<beans:property name="mySetterSuccessURL" value="/memberctl/userMainPage" />
 	</beans:bean>
- 	-->
+	<!-- 인증에 실패한 경우 -->
+	<beans:bean id="authFailureHandler" class="com.kosmo.member.CustomAuthenticationFailureHandler">
+		<beans:property name="mySetterFailureURL" value="/memberctl/loginPage?error" />
+	</beans:bean>
+	 	
+	
 
 	<!-- 방법1. 인증 처리 : 하드코딩
     <authentication-manager>
 		<authentication-provider>
-			<password-encoder hash="sha"/>
+			<password-encoder hash="sha256"/>
 		    <user-service>
 				<user name="lkh" password="d7e6351eaa13189a5a3641bab846c8e8c69ba39f" authorities="ROLE_USER, ROLE_ADMIN" />
 				<user name="user" password="111" authorities="ROLE_USER" />

@@ -7,7 +7,7 @@
 <html>
 <body>
 <h1 id="banner">Member Login</h1>
-<form name="f" action="/auth" method="POST">
+<form name="f" action="/filterLogin" method="POST">
 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 <table>
     <tr>
@@ -21,6 +21,7 @@
     <tr>
         <td colspan="2">
         	<input type = "checkbox" name="_spring_security_remember_me" id = "remember_me" />Remember Me
+        	<br>_spring_security_remember_me
         </td>
     </tr>
     
@@ -30,7 +31,7 @@
         </td>
     </tr>
 </table>
-</form>
+</form> 
 
 <c:if test="${not empty error}">
 	<div class="error">${error}</div>

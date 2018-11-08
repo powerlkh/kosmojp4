@@ -5,73 +5,64 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.3.1.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </head>
 <body>
 /sample/tiles/top.jsp<br>
-<a href="/member/login_page.jsp">로그인폼(/member/login_page.jsp)</a><br>
-<a href="tiles_member_login_page">로그인폼(tiles_member_login_page)</a><br>
-<a href="/loginPageByTiles">로그인폼(/loginPageByTiles)</a><br>
-<a href="/loginPageByMav">로그인폼(/loginPageByMav)</a><br>
-<a href="/mlist">회원목록(/mlist)</a><br>
-<a href="side_member_denied_page">side(side)</a><br>
-<a href="side2_member_denied_page">side2(side)</a><br>
+<a href="/member/login_page.jsp">JSP직접접근 : 로그인폼(/member/login_page.jsp)</a><br>
+<hr>
+<a href="/memberctl/loginPageByMav">컨트롤러MAV :로그인폼(/memberctl/loginPageByMav)</a><br>
+<a href="/memberctl/tiles">컨트롤러TILES :로그인폼(/memberctl/tiles)</a><br>
+<a href="/memberctl/loginPageByTiles">컨트롤러TILES :로그인폼(/memberctl/loginPageByTiles)</a><br>
+<hr>
 
+<a href="/tilestop_member_login_page">TILES직접접근 : 로그인폼(tilestop_member_login_page)</a><br>
+<a href="/tilesbody_member_login_page">TILES직접접근 : 로그인폼(tilesbody_member_login_page)</a><br>
+<a href="/tilespopup_member_login_page" id="opener" >TILES직접접근 : 회원목록팝업(/tilespopup_login_page)</a><br>
 
-<a href="javascript:pageOpen('popup_login_page')">회원목록팝업(popup_member_login_page)</a><br>
+<hr>
+<button type="button" id="responsebody_ajax">컨트롤러REST :ajax</button><br>
+<div id="ajaxResDiv"></div>
 
-
-
-
-
-<button type="button" id="list_board">ajax</button><br>
-
-
-<!-- <button onclick="myFunction()">Try it</button> -->
 
 <script>
 $(document).ready(function(){
+	var l = (screen.availWidth-400) / 2;
+	var t = (screen.availHeight-400) / 2;	
+ 
+	$("#opener").on('click',function(event){
+		window.open(this.href,"window","width=400,height=400,left=" + l + ",top=" + t + ", scrollbars = yes, location = no, toolbar = no, menubar = no, status = no");
+		 return false;
+	});
+	    
+	    
+	//ajax 리스트
+	$("#responsebody_ajax").click(function(){
+		$.ajax({
+			url:"/memberctl/responsebody_ajax",
+			type:"get",  //get
+			contentType:"application/x-www-form-urlencoded; charset=utf-8", 
+			data:"seq=1" ,
+			//content-type:"application/json; charset=utf-8" ,
+			//data: JSON.stringify({"bseq":"2", "userid":"lee"}),
+			dataType: "json",  //optional
+			success:function(resObject){
+				$("#ajaxResDiv").empty();
+				var htmlStr = "";
+				$.map(resObject, mapCallback);
+				function mapCallback( v,  i) { 
+					htmlStr += v.mid + " , " + v.mpw + "<br>";
+				}
+				$("#ajaxResDiv").html(htmlStr);
+			}
+		});
+	});
+	
 
-	//보드 리스트
-	$("#list_board").click(function(){
-    	  $.ajax({
-              type: "POST",
-              url: "${path}/ajaxlist.do",
-              headers: {
-                  "Content-Type" : "application/json"
-              },
-              dataType: "json",
-              data:// $.param(
-              	 JSON.stringify(
-              	{
-              		//searchGubun:"mtitle",
-              		//searchStr:"dd",
-              	}
-              ),
-              success: function(list){
-            	    console.log(list);
-
-					//[{…}, {…}, {…}, {…}, {…}, {…}]
-					var htmlStr = "";
-
-					$.each(list, function(i,vo) {
-						htmlStr += "<tr><td>"+vo.bseq+"</td><td>"+vo.btitle+"</td><td>"+vo.regdate
-						+"</td></tr>"
-					});
-					$("#resultDiv").html(htmlStr);
-
-              }
-          });
-    });
 });
 </script>
 
-<script>
-function pageOpen(url) {
-    window.open(url, "_blank"
-    		, "toolbar=yes,scrollbars=yes,resizable=yes,top=200,left=300,width=900,height=500");
-}
-</script>
+
 
 
 </body>
